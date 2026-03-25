@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GAEL XIT | RED HUB PREMIUM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --main: #ff0000; --main-dim: rgba(255, 0, 0, 0.15); --bg: #000; --glass: rgba(10, 0, 0, 0.92); --border: rgba(255, 0, 0, 0.3); }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body { height: 100vh; overflow: hidden; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; user-select: none; }
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; opacity: 0.6; }
+
+        /* PRELOADER PROFESIONAL */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s ease-out; }
+        .loader-logo { font-family: 'Orbitron'; font-size: 2.5rem; font-weight: 900; color: #fff; text-shadow: 0 0 15px #fff; animation: glitch 1.5s infinite; margin-bottom: 20px; }
+        .loader-bar-bg { width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .loader-bar { width: 0%; height: 100%; background: #fff; box-shadow: 0 0 10px #fff; animation: load 2.5s forwards; }
+        @keyframes glitch { 0% { text-shadow: 0 0 15px #fff; } 2% { text-shadow: 2px 0 #ff0000, -2px 0 #00ffff; } 4% { text-shadow: 0 0 15px #fff; } 100% { text-shadow: 0 0 15px #fff; } }
+        @keyframes load { 0% { width: 0%; } 100% { width: 100%; } }
+
+        /* DIÁLOGO INICIAL PREMIUM */
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(12px); opacity: 0; visibility: hidden; transition: 0.4s; }
+        #overlay.show { opacity: 1; visibility: visible; }
+        .dialog-pro { background: var(--glass); border: 2px solid var(--main); width: 90%; max-width: 380px; padding: 40px 30px; border-radius: 20px; text-align: center; box-shadow: 0 0 40px var(--main); transform: scale(0.9); transition: 0.4s; }
+        #overlay.show .dialog-pro { transform: scale(1); }
+        .dialog-pro h1 { font-family: 'Orbitron'; font-size: 1.6rem; margin-bottom: 10px; color: #fff; text-shadow: 0 0 10px #fff; }
+        .dialog-pro p { font-size: 0.95rem; color: #ccc; margin-bottom: 30px; line-height: 1.5; }
+
+        /* REPRODUCTOR FLOTANTE */
+        .music-player { position: fixed; top: 25px; right: 25px; z-index: 1000; background: var(--glass); border: 1px solid var(--main); padding: 12px 22px; border-radius: 50px; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(255,0,0,0.4); backdrop-filter: blur(10px); }
+        .music-player:hover { box-shadow: 0 0 25px var(--main); transform: translateY(-2px); }
+        .play-btn { color: var(--main); font-family: 'Orbitron'; font-size: 0.65rem; font-weight: bold; letter-spacing: 1px; }
+
+        /* CONTENIDO PRINCIPAL */
+        .wrapper { height: 100vh; width: 100%; position: relative; z-index: 10; transition: 0.9s cubic-bezier(0.85, 0, 0.15, 1); }
+        section { height: 100vh; width: 100%; display: flex; justify-content: center; align-items: center; padding: 25px; }
+        .glass-card { background: var(--glass); border: 2px solid var(--border); width: 100%; max-width: 420px; border-radius: 28px; padding: 45px 35px; text-align: center; backdrop-filter: blur(25px); box-shadow: 0 15px 50px rgba(0,0,0,0.6); animation: cardIn 1s ease-out; }
+        @keyframes cardIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        h1.main-title { font-family: 'Orbitron'; color: var(--main); font-size: 2.2rem; margin-bottom: 15px; text-shadow: 0 0 25px var(--main); letter-spacing: 2px; }
+        .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; background: var(--main-dim); color: var(--main); font-size: 0.7rem; font-family: 'Orbitron'; margin-bottom: 25px; border: 1px solid var(--border); text-transform: uppercase; letter-spacing: 1px; }
+        .info-box { text-align: left; background: rgba(255, 255, 255, 0.04); padding: 20px; border-radius: 16px; margin-bottom: 35px; border-left: 4px solid var(--main); }
+        .info-box h3 { font-family: 'Orbitron'; font-size: 0.95rem; margin-bottom: 8px; color: #fff; }
+        .info-box p { font-size: 0.88rem; color: #aaa; line-height: 1.5; }
+
+        /* BOTONES PREMIUM */
+        .btn { display: block; width: 100%; padding: 20px; background: var(--main); color: #000; font-weight: 800; text-transform: uppercase; border-radius: 16px; font-family: 'Orbitron'; text-decoration: none; border: none; cursor: pointer; transition: 0.4s; font-size: 0.85rem; letter-spacing: 1px; box-shadow: 0 8px 20px rgba(255, 0, 0, 0.3); position: relative; overflow: hidden; }
+        .btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition: 0.5s; }
+        .btn:hover:not(:disabled)::after { left: 100%; }
+        .btn:hover:not(:disabled) { box-shadow: 0 12px 30px rgba(255, 0, 0, 0.6); transform: translateY(-2px); }
+        .btn:disabled { background: #1a0a0a; color: #555; cursor: not-allowed; box-shadow: none; border: 1px solid #331111; }
+        
+        .timer { font-size: 4.5rem; color: var(--main); font-family: 'Orbitron'; margin: 20px 0; font-weight: 900; text-shadow: 0 0 40px var(--main); }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-logo">GAEL XIT</div>
+        <div class="loader-bar-bg"><div class="loader-bar"></div></div>
+    </div>
+
+    <div id="overlay">
+        <div class="dialog-pro">
+            <h1>VERIFICACIÓN REQUERIDA</h1>
+            <p>Para activar el Hub Premium y descargar las nuevas texturas, debes suscribirte a mi canal oficial.</p>
+            <a href="https://youtube.com/@gaeltxt?si=s9TAe9CWBuO6mGP1" target="_blank" class="btn" onclick="closeDialog()">SUSCRIBIRSE Y ACCEDER</a>
+        </div>
+    </div>
+
+    <audio id="v_welcome"><source src="bienvenida.mp3" type="audio/mpeg"></audio>
+    <audio id="v_music" loop><source src="mate.m4a" type="audio/mp4"></audio>
+
+    <div id="particles-js"></div>
+
+    <div class="music-player" onclick="toggleM(event)">
+        <span class="play-btn" id="m_status">♫ STATUS: LOCKED</span>
+    </div>
+
+    <div class="wrapper" id="master">
+        
+        <section>
+            <div class="glass-card">
+                <div class="status-badge">GAEL XIT V1.0 PRO</div>
+                <h1 class="main-title">RED HUB</h1>
+                <div class="info-box">
+                    <h3>ESTADO: ACTIVO</h3>
+                    <p>Inyección de datos segura. Texturas premium cargadas y verificadas.</p>
+                </div>
+                <div id="t1" class="timer">7</div>
+                <button id="b1" class="btn" disabled onclick="slide(1)">ACCEDER AL SERVIDOR</button>
+            </div>
+        </section>
+
+        <section>
+            <div class="glass-card">
+                <div class="status-badge">DESCARGA FINAL</div>
+                <h1 class="main-title">MEDIAFIRE</h1>
+                <div class="info-box">
+                    <h3>PACK: ROPAS + ARMAS</h3>
+                    <p>Texturas exclusivas sin riesgo de baneo. Servidor optimizado.</p>
+                </div>
+                <a href="https://www.mediafire.com/file/1u7l51bidctipqt/TEXTURAS+ROPAS+++ARMAS+👻.zip/file" target="_blank" class="btn">DESCARGAR AHORA</a>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        const vW = document.getElementById('v_welcome');
+        const vM = document.getElementById('v_music');
+        const mS = document.getElementById('m_status');
+        let audioActive = false;
+
+        // MANEJO DEL PRELOADER
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('preloader').style.opacity = '0';
+                document.getElementById('preloader').style.visibility = 'hidden';
+                setTimeout(() => {
+                    document.getElementById('overlay').classList.add('show');
+                }, 200);
+            }, 2500);
+
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 110, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": "#ff0000" },
+                    "opacity": { "value": 0.4, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": { "enable": true, "distance": 140, "color": "#ff0000", "opacity": 0.25, "width": 1 },
+                    "move": { "enable": true, "speed": 2.5 }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } }
+                }
+            });
+        };
+
+        // CIERRE DEL DIÁLOGO Y ACTIVACIÓN DE AUDIO
+        function closeDialog() {
+            document.getElementById('overlay').classList.remove('show');
+            runT(7, 't1', 'b1'); // Inicia el timer de la primera pantalla
+            if (!audioActive) {
+                audioActive = true;
+                vW.play().catch(() => console.log("Audio interactivo requerido"));
+                mS.innerText = "♫ BIENVENIDA";
+                vW.onended = () => { vM.volume = 0.5; vM.play(); mS.innerText = "♫ MUSIC: ON"; };
+            }
+        }
+
+        // CONTROL DE MÚSICA
+        function toggleM(e) {
+            e.stopPropagation();
+            if (!audioActive) return;
+            if (vM.paused) { vM.play(); mS.innerText = "♫ MUSIC: ON"; }
+            else { vM.pause(); mS.innerText = "♫ MUSIC: PAUSA"; }
+        }
+
+        // TEMPORIZADOR
+        function runT(time, dId, bId) {
+            let s = time;
+            const d = document.getElementById(dId);
+            const b = document.getElementById(bId);
+            const i = setInterval(() => {
+                d.innerText = s;
+                if (--s < 0) { clearInterval(i); d.innerText = "✓"; b.disabled = false; }
+            }, 1000);
+        }
+
+        // NAVEGACIÓN ENTRE PANTALLAS
+        function slide(n) { document.getElementById('master').style.transform = `translateY(-${n * 100}vh)`; }
+    </script>
+</body>
+</html>
